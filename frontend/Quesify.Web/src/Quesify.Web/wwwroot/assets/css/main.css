@@ -1,0 +1,11 @@
+﻿.layout-container {
+    display: block;
+}
+
+.layout-demo-wrapper {
+    flex-direction: row;
+}
+
+ul {
+    margin-bottom: 0rem;
+}

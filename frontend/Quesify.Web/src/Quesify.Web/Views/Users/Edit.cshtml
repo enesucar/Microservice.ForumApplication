@@ -1,0 +1,81 @@
+﻿@using Quesify.Web.Models.Users.EditUserModels.ViewModels;
+@model EditUserViewModel
+
+@{
+    ViewData["Title"] = $"Edit Profile";
+    var error = ViewData["Errors"] as string;
+}
+
+<div class="card container" style="max-width:800px">
+    <div class="card-body">
+        <div class="app-brand justify-content-center">
+            <span class="app-brand-text text-body fw-bold h3">Edit Profile</span>
+        </div>
+
+        @if (!error.IsNullOrWhiteSpace())
+        {
+            <div class="alert alert-danger" role="alert">
+                <ul>
+                    <li><span>@error</span></li>
+                </ul>
+            </div>
+        }
+
+        <form id="edit-user-form" class="mb-3" asp-controller="Users" asp-action="Edit" method="POST" enctype="multipart/form-data">
+            <div class="row mb-3 ">
+                <div class="col-md-12 profile-image-col">
+                    <label asp-for="@Model.ProfileImage" class="form-label">Profile Image</label>
+                    <input type="file" class="form-control" id="profile-image" asp-for="@Model.ProfileImage">
+                    <span asp-validation-for="@Model.ProfileImage" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-12">
+                    <input type="checkbox" class="form-check-input" id="title" asp-for="@Model.RemoveProfileImage">
+                    <label asp-for="@Model.RemoveProfileImage" class="form-label m-lg-1">Remove Profile Image</label>
+                    <span asp-validation-for="@Model.RemoveProfileImage" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-4">
+                    <label asp-for="@Model.Location" class="form-label">Location</label>
+                    <input type="text" class="form-control" id="location" asp-for="@Model.Location">
+                    <span asp-validation-for="@Model.Location" class="text-danger"></span>
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="@Model.WebSiteUrl" class="form-label">Web Site Url</label>
+                    <input type="text" class="form-control" id="web-site-url" asp-for="@Model.WebSiteUrl">
+                    <span asp-validation-for="@Model.WebSiteUrl" class="text-danger"></span>
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="@Model.BirthDate" class="form-label">Birth Date</label>
+                    <input type="date" class="form-control" id="birth-date" asp-for="@Model.BirthDate">
+                    <span asp-validation-for="@Model.BirthDate" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-12">
+                    <label asp-for="@Model.About" class="form-label">About</label>
+                    <textarea class="form-control" id="about" name="About" rows="10">@Model.About</textarea>
+                    <span asp-validation-for="@Model.About" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="mb-3">
+                <button class="btn btn-primary d-grid w-100" type="submit" id="edit-user-btn">Submit</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $('#edit-user-form :checkbox').change(function () {
+            // this will contain a reference to the checkbox
+            if (this.checked) {
+                $('.profile-image-col').addClass("d-none");
+            } else {
+                $('.profile-image-col').removeClass("d-none");
+            }
+        });
+    </script>
+}

@@ -1,0 +1,46 @@
+﻿@using Quesify.Web.Models.Users.LoginModels.ViewModels;
+@model UserLoginViewModel
+
+@{
+    ViewData["Title"] = "Login";
+    var error = ViewData["Errors"] as string;
+}
+
+<div class="card container" style="max-width:600px">
+    <div class="card-body">
+        <div class="app-brand justify-content-center">
+            <span class="app-brand-text text-body fw-bold h3">Login</span>
+        </div>
+
+        @if (!error.IsNullOrWhiteSpace())
+        {
+            <div class="alert alert-danger" role="alert">
+                <ul>
+                    <li><span>@error</span></li>
+                </ul>
+            </div>
+        }
+
+        @*<div asp-validation-summary="All" class="text-danger" role="alert"></div>*@
+        <form id="register" class="mb-3" asp-controller="Users" asp-action="Login" method="POST">
+            <div class="row">
+                <div class="mb-3 col-md-12">
+                    <label asp-for="@Model.Email" class="form-label">Email</label>
+                    <input type="text" class="form-control" id="email" asp-for="@Model.Email">
+                    <span asp-validation-for="@Model.Email" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="mb-3 row">
+                <div class="mb-3 col-md-12">
+                    <label asp-for="@Model.Password" class="form-label">Password</label>
+                    <input type="password" class="form-control" id="password" asp-for="@Model.Password">
+                    <span asp-validation-for="@Model.Password" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="mb-3">
+                <button class="btn btn-primary d-grid w-100" type="submit">Login</button>
+            </div>
+        </form>
+    </div>
+</div>
+

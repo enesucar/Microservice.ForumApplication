@@ -1,0 +1,49 @@
+﻿@using Quesify.Web.Models.Users;
+@using Quesify.SharedKernel.Security.Users
+@using Quesify.Web.Interfaces
+
+@model User
+
+@inject ICurrentUser CurrentUser
+@inject IUserService UserService
+
+@{
+    ViewData["Title"] = $"User - {Model.UserName}";
+    var message = TempData["EditUserMessage"] as string;
+}
+
+@if (!message.IsNullOrWhiteSpace())
+{
+    <div class="alert alert-success" role="alert">
+        <ul>
+            <li><span>@message</span></li>
+        </ul>
+    </div>
+}
+
+<div class="card mt-3">
+    <div class="card-header">
+        <h4 class="mb-0">@Model.UserName</h4>
+        Member for @((int)(DateTime.UtcNow - Model.CreationDate).TotalDays) days
+    </div>
+    <div class="card-body">
+        <div class="timeline-item timeline-item-primary border-left-dashed">
+            <div class="row">
+                <div class="col-md-2">
+                    <img src="@Model.ProfileImageUrl" width="200" height="200"/>
+                    @if (CurrentUser.IsAuthenticated && CurrentUser.UserId == Model.Id)
+                    {
+                        <a type="button" style="width:200px" class="btn btn-outline-primary mt-3 py-1" asp-controller="Users" asp-action="Edit">Edit</a>
+                    }
+                </div>
+                <div class="col-md-10">
+                    <div><b>Score:</b> @Model.Score</div>
+                    <div class="mt-1"><b>Location:</b> @(Model.Location ?? "-")</div>
+                    <div class="mt-1"><b>Birth Date:</b> @(Model.BirthDate?.ToString("dd/MM/yyyy") ?? "-")</div>
+                    <div class="mt-1"><b>Web Site Url:</b> @(Model.WebSiteUrl?.ToString() ?? "-")</div>
+                    <div class="mt-1"><b>About:</b> @(Model.About?.ToString() ?? "-")</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,44 @@
+﻿@using Quesify.Web.Models.Questions.SearchQuestionModels.Responses
+@using Quesify.Web.Interfaces
+
+@model SearchForQuestionSuccessResponse
+@inject IUserService UserService
+
+@{
+    ViewData["Title"] = "Questions";
+    var questionText = (ViewBag.QuestionText as string) ?? string.Empty;
+}
+
+@* <h4 class="py-3 mb-4">
+    <span class="text-muted fw-light">Byte Overflow / </span>All Questions
+</h4> *@
+<div class="card">
+    <h5 class="card-header">
+        @Model.TotalCount questions <a type="button" class="btn btn-outline-primary float-end" asp-action="Create" asp-controller="Questions">Ask Question</a>
+    </h5>
+    <div class="card-body mt-3">
+        @foreach (var question in Model.Items)
+        {
+            <div class="border-top timeline-item pb-4 timeline-item-primary border-left-dashed">
+                <div class="row">
+                    <div class="col-md-1 mb-1 mt-4">
+                        <div>@question.QuestionScore Votes</div>
+                    </div>
+                    <div class="col-md-11">
+                        <h6 class="mb-1 mt-4"><a class="text-reset text-decoration-none" href="questions/detail?id=@question.Id">@question.Title</a></h6>
+                        <span class="text-muted">@question.Body</span>
+                        <br>
+                        <div class="float-end text-muted">
+                            <img src="@UserService.GetProfileImageUrl(question.User.ProfileImageUrl)" style="margin-right: 3px; width: 20px; height:20px">
+                            <a class="text-reset text-decoration-none" href="/users?id=@question.User.Id">@question.User.UserName</a> 
+                            <b>(@question.User.Score)</b> <small class="">asked @question.CreationDate</small></div>
+                    </div>
+                </div>
+            </div>
+        }
+        @if (Model.Items.Count == 0 && !questionText.IsNullOrWhiteSpace())
+        {
+            <p>We couldn't find anything for: <b>@questionText</b></p>
+        }
+    </div>
+</div>

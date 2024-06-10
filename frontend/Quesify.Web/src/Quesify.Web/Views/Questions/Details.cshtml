@@ -1,0 +1,158 @@
+﻿@using Quesify.Web.Models.Questions.QuestionDetailModels.Responses
+@using Quesify.SharedKernel.Security.Users
+@using Quesify.Web.Enums
+@using Quesify.Web.Interfaces
+
+@model DetailForQuestionSuccessResponse
+
+@inject ICurrentUser CurrentUser
+@inject IUserService UserService
+
+@{
+    var shortQuestionTitle = (Model.Title.Length >= 40) ? $"{Model.Title.Substring(0, 40)}..." : Model.Title;
+    ViewData["Title"] = $"Question - {shortQuestionTitle}";
+  
+    var createAnswerError = TempData["CreateAnswerErrors"] as string;
+    var createAnswerMessage = TempData["CreateAnswerMessage"] as string;
+    var createAnswerValidationErrors = (TempData["CreateAnswerValidationErrors"] as string[]) ?? [];
+    
+    var createVoteError = TempData["CreateVoteErrors"] as string;
+    var createVoteMessage = TempData["CreateVoteMessage"] as string;
+}
+
+@if (!createVoteError.IsNullOrEmpty())
+{
+    <div class="alert alert-danger" role="alert">
+        <ul>
+            <li><span>@createVoteError</span></li>
+        </ul>
+    </div>
+}
+else if (!createVoteMessage.IsNullOrEmpty())
+{
+    <div class="alert alert-success" role="alert">
+        <ul>
+            <li><span>@createVoteMessage</span></li>
+        </ul>
+    </div>     
+}
+
+<div class="card">
+    <h5 class="card-header">@Model.Title</h5>
+    <div class="card-body mt-3">
+        <div class="timeline-item pb-4 timeline-item-primary border-left-dashed">
+            <div class="row">
+                <div class="col-md-1 mb-1">
+                    <a type="button" class="btn btn-outline-secondary" asp-action="Vote" asp-controller="Questions" asp-route-questionId="@Model.Id" asp-route-voteType="@VoteType.Upvote">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M8 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L7.5 2.707V14.5a.5.5 0 0 0 .5.5"></path>
+                        </svg>
+                        <span class="visually-hidden">Button</span>
+                    </a>                   
+                    <div class="h4 ms-4 mb-1 mt-1">@Model.Score</div>
+                    <a type="button" class="btn btn-outline-secondary" asp-action="Vote" asp-controller="Questions" asp-route-questionId="@Model.Id" asp-route-voteType="@VoteType.Downvote">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M8 1a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L7.5 13.293V1.5A.5.5 0 0 1 8 1"></path>
+                        </svg>
+                        <span class="visually-hidden">Button</span>
+                    </a>                    @* <div>@item.a Answer</div> *@
+                    @* <div>@item. Views</div> *@
+                </div>
+                <div class="col-md-11">
+                    <span class="text-muted">@Model.Body</span>
+                    <br>
+                    <div class="text-muted position-absolute bottom-0 end-0 mb-3 me-5">
+                        <img src="@UserService.GetProfileImageUrl(Model.User.ProfileImageUrl)" style="margin-right: 3px; width: 20px; height:20px">
+                        <a class="text-reset text-decoration-none" href="/users?id=@Model.User.Id">@Model.User.UserName</a>
+                        <b>(@Model.User.Score)</b> 
+                        <small class="">asked @Model.CreationDate</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@foreach (var answer in Model.Answers)
+{
+<div class="card mt-3">
+    <div class="card-body mt-3">
+        <div class="timeline-item pb-4 timeline-item-primary border-left-dashed">
+            <div class="row">
+                <div class="col-md-1 mb-1">
+                    <a type="button" class="btn btn-outline-secondary" asp-action="Vote" asp-controller="Answers" asp-route-questionId="@Model.Id" asp-route-answerId="@answer.Id" asp-route-voteType="@VoteType.Upvote">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M8 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L7.5 2.707V14.5a.5.5 0 0 0 .5.5"></path>
+                        </svg>
+                        <span class="visually-hidden">Button</span>
+                    </a>                   
+                    <div class="h4 ms-4 mb-1 mt-1">@answer.Score</div>
+                    <a type="button" class="btn btn-outline-secondary" asp-action="Vote" asp-controller="Answers" asp-route-questionId="@Model.Id" asp-route-answerId="@answer.Id" asp-route-voteType="@VoteType.Downvote">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M8 1a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L7.5 13.293V1.5A.5.5 0 0 1 8 1"></path>
+                        </svg>
+                        <span class="visually-hidden">Button</span>
+                    </a>
+                </div>
+                <div class="col-md-11">
+                    <span class="text-muted">@answer.Body</span>
+                    <br>
+                    <div class="text-muted position-absolute bottom-0 end-0 mb-3 me-5">
+                        <img src="@UserService.GetProfileImageUrl(answer.User.ProfileImageUrl)" style="margin-right: 3px; width: 20px; height:20px;">
+                        <a class="text-reset text-decoration-none" href="/users?id=@answer.User.Id">@answer.User.UserName</a>
+                        <b>(@answer.User.Score)</b> 
+                        <small class="">answered @Model.CreationDate</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+}
+
+ 
+@if (CurrentUser.IsAuthenticated && !Model.Answers.Any(o => o.User.Id == CurrentUser.UserId))
+{
+<div class="mt-5">
+    <h5>Create Answer</h5>
+    @if (createAnswerValidationErrors.Length > 0)
+    {
+        <div class="alert alert-danger" role="alert">
+            <ul>
+                @foreach(var validationError in createAnswerValidationErrors)
+                {
+                    <li><span>@validationError</span></li>
+                }
+            </ul>
+        </div>
+    }
+    else if (!createAnswerError.IsNullOrEmpty())
+    {
+        <div class="alert alert-danger" role="alert">
+            <ul>
+                <li><span>@createAnswerError</span></li>
+            </ul>
+        </div>
+    }
+    else if (!createAnswerMessage.IsNullOrEmpty())
+    {
+        <div class="alert alert-success" role="alert">
+            <ul>
+                <li><span>@createAnswerMessage</span></li>
+            </ul>
+        </div>     
+    }
+    <form method="post" id="create-answer"  asp-controller="Answers" asp-action="Create" method="POST">
+        <input name="questionId" style="display:none" id="question-id" value="@Model.Id"></input>
+        <div class="row">
+            <div class="mb-3 col-md-12">
+                <textarea name="body" class="form-control" rows="10"></textarea>
+            </div>
+        </div>
+        <div class="mb-3">
+            <button class="btn btn-primary d-grid w-100" type="submit">Submit</button>
+        </div>
+    </form>
+</div>
+}
+ 
