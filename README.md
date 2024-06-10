@@ -1,0 +1,1 @@
+![plot](./images/uygulama-görsel.jpg)
