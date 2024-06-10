@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="7.0.0" />
+    <PackageReference Include="Quesify.SharedKernel.Core" Version="1.0.4" />
+    <PackageReference Include="Quesify.SharedKernel.Guids" Version="1.0.4" />
+    <PackageReference Include="Quesify.SharedKernel.TimeProviders" Version="1.0.4" />
+    <PackageReference Include="Quesify.SharedKernel.Utilities" Version="1.0.4" />
+  </ItemGroup>
+
+</Project>

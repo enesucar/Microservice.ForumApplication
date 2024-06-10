@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Quesify.SharedKernel.EventBus.Kafka" Version="1.0.5" />
+    <PackageReference Include="Quesify.SharedKernel.Json.Newtonsoft" Version="1.0.4" />
+    <PackageReference Include="Quesify.SharedKernel.Security" Version="1.0.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Quesify.QuestionService.Core\Quesify.QuestionService.Core.csproj" />
+  </ItemGroup>
+
+</Project>

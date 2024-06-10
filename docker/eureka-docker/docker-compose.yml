@@ -1,0 +1,6 @@
+services:
+    eureka-server:
+        container_name: eureka
+        ports:
+            - 8761:8761
+        image: steeltoeoss/eureka-server
